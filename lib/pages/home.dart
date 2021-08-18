@@ -57,16 +57,18 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          _showGraph(),
-          Expanded(
-            child: ListView.builder(
-              itemCount: bands.length,
-              itemBuilder: (context, int index) => _bandTile(bands[index]),
+      body: Container(
+        child: Column(
+          children: [
+            _showGraph(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: bands.length,
+                itemBuilder: (context, int index) => _bandTile(bands[index]),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 3,
@@ -175,35 +177,42 @@ class _HomePageState extends State<HomePage> {
       dataMap.putIfAbsent(band.name, () => band.votes.toDouble());
     });
 
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      width: double.infinity,
-      height: 200,
-      child: PieChart(
-        dataMap: dataMap,
-        animationDuration: Duration(milliseconds: 800),
-        chartLegendSpacing: 32,
-        colorList: colorList,
-        initialAngleInDegree: 0,
-        chartType: ChartType.disc,
-        ringStrokeWidth: 32,
-        legendOptions: LegendOptions(
-          showLegendsInRow: false,
-          legendPosition: LegendPosition.right,
-          showLegends: true,
-          legendShape: BoxShape.circle,
-          legendTextStyle: TextStyle(
-            fontWeight: FontWeight.bold,
+    if (dataMap.isEmpty) {
+      return Container(
+        height: 0,
+        width: 0,
+      );
+    } else {
+      return Container(
+        width: double.infinity,
+        height: 200,
+        child: PieChart(
+          dataMap: dataMap,
+          animationDuration: Duration(milliseconds: 800),
+          chartLegendSpacing: 32,
+          chartRadius: MediaQuery.of(context).size.width / 3.2,
+          colorList: colorList,
+          initialAngleInDegree: 0,
+          chartType: ChartType.ring,
+          ringStrokeWidth: 32,
+          legendOptions: LegendOptions(
+            showLegendsInRow: false,
+            legendPosition: LegendPosition.right,
+            showLegends: true,
+            legendShape: BoxShape.circle,
+            legendTextStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          chartValuesOptions: ChartValuesOptions(
+            showChartValueBackground: true,
+            showChartValues: true,
+            showChartValuesInPercentage: true,
+            showChartValuesOutside: false,
+            decimalPlaces: 1,
           ),
         ),
-        chartValuesOptions: ChartValuesOptions(
-          showChartValueBackground: true,
-          showChartValues: true,
-          showChartValuesInPercentage: true,
-          showChartValuesOutside: false,
-          decimalPlaces: 0,
-        ),
-      ),
-    );
+      );
+    }
   }
 }
