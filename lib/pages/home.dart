@@ -184,6 +184,7 @@ class _HomePageState extends State<HomePage> {
       );
     } else {
       return Container(
+        padding: EdgeInsets.only(top: 20),
         width: double.infinity,
         height: 200,
         child: PieChart(
